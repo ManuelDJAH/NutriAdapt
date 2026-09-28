@@ -1,6 +1,11 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using NutriAdapt.Data;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<NutriAdaptContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("NutriAdaptConnection")));
 
 var app = builder.Build();
 
