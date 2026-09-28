@@ -1,6 +1,46 @@
-@model NutriAdapt.Models.MensajePrueba
+@{
+    ViewData["Title"] = "Inicio";
+}
 
-<h2>Prueba de cadena (string)</h2>
+<div class="text-center mb-5">
+    <h1 class="display-4">NutriAdapt</h1>
+    <p class="lead text-muted">
+        Planes nutricionales por porciones equivalentes (SMAE) y recetas adaptadas a cada paciente.
+    </p>
+</div>
 
-<p><strong>Mensaje recibido del Controller:</strong> @Model.Contenido</p>
-<p><strong>Generado el:</strong> @Model.FechaGenerado</p>
+<div class="row justify-content-center g-4">
+    <div class="col-md-5">
+        <div class="card h-100 border-success tarjeta-rol">
+            <div class="card-header bg-success text-white">
+                <h4 class="my-1">Nutriólogo</h4>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <p class="card-text">Gestiona a tus pacientes, sus planes y el catálogo de alimentos y recetas.</p>
+                <ul class="text-muted small">
+                    <li>Pacientes y planes nutricionales</li>
+                    <li>Catálogo de alimentos y recetas</li>
+                    <li>Recetas adaptadas e historial</li>
+                </ul>
+                <a class="btn btn-success mt-auto" asp-area="Nutriologo" asp-controller="Home" asp-action="Index">Entrar como nutriólogo</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card h-100 border-primary tarjeta-rol">
+            <div class="card-header bg-primary text-white">
+                <h4 class="my-1">Paciente</h4>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <p class="card-text">Consulta tu plan y adapta cualquier receta a las porciones que te tocan.</p>
+                <ul class="text-muted small">
+                    <li>Mi plan por tiempo de comida</li>
+                    <li>Adaptar una receta del catálogo</li>
+                    <li>Mi historial de recetas</li>
+                </ul>
+                <a class="btn btn-primary mt-auto" asp-area="Paciente" asp-controller="Home" asp-action="Index">Entrar como paciente</a>
+            </div>
+        </div>
+    </div>
+</div>

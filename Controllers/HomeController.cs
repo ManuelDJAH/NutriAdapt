@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NutriAdapt.Models;
 
@@ -7,12 +8,12 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        var modelo = new MensajePrueba
-        {
-            Contenido = "Hola desde el Controller",
-            FechaGenerado = DateTime.Now
-        };
+        return View();
+    }
 
-        return View(modelo);
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
