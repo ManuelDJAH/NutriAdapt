@@ -22,12 +22,40 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Nutriologo" asp-controller="Home" asp-action="Index">Nutriólogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Paciente" asp-controller="Home" asp-action="Index">Paciente</a>
-                        </li>
+                        @if (User.IsInRole(RolesUsuario.Nutriologo))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Nutriologo" asp-controller="Home" asp-action="Index">Mi panel</a>
+                            </li>
+                        }
+                        else if (User.IsInRole(RolesUsuario.Paciente))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Paciente" asp-controller="Home" asp-action="Index">Mi plan</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-muted">Hola, @User.FindFirst(NutriAdapt.Servicios.UsuarioClaimsPrincipalFactory.ClaimNombreCompleto)?.Value</span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-area="" asp-controller="Usuarios" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link btn btn-link text-dark">Cerrar sesión</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Login">Iniciar sesión</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Registro">Registro</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

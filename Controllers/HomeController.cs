@@ -8,6 +8,13 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
+        // Pagina inicial publica; con sesion iniciada se va directo al panel de su rol
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            var area = User.IsInRole(RolesUsuario.Nutriologo) ? RolesUsuario.Nutriologo : RolesUsuario.Paciente;
+            return RedirectToAction("Index", "Home", new { area });
+        }
+
         return View();
     }
 

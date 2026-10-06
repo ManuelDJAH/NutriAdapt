@@ -255,3 +255,93 @@ GO
 
 DROP PROCEDURE IF EXISTS sp_HistorialRecetasAdaptadasPaciente;
 GO
+
+
+/* =========================================================
+   AUTENTICACION (usados por UsuarioStore / ASP.NET Core Identity)
+   La busqueda por correo depende de la intercalacion CI de la BD:
+   Identity manda el correo normalizado en MAYUSCULAS.
+   ========================================================= */
+
+CREATE OR ALTER PROCEDURE Usuarios_Crear
+    @NombreCompleto  NVARCHAR(150),
+    @Correo          NVARCHAR(150),
+    @PasswordHash    NVARCHAR(256),
+    @RolId           TINYINT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Usuarios (NombreCompleto, Correo, PasswordHash, RolId)
+    VALUES (@NombreCompleto, @Correo, @PasswordHash, @RolId);
+
+    SELECT CAST(SCOPE_IDENTITY() AS INT) AS UsuarioId;
+END
+GO
+
+CREATE OR ALTER PROCEDURE Usuarios_ObtenerPorCorreo
+    @Correo NVARCHAR(150)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT UsuarioId, NombreCompleto, Correo, PasswordHash, RolId, FechaCreacion
+    FROM Usuarios
+    WHERE Correo = @Correo;
+END
+GO
+
+CREATE OR ALTER PROCEDURE Usuarios_ObtenerPorId
+    @UsuarioId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT UsuarioId, NombreCompleto, Correo, PasswordHash, RolId, FechaCreacion
+    FROM Usuarios
+    WHERE UsuarioId = @UsuarioId;
+END
+GO
+
+CREATE OR ALTER PROCEDURE Usuarios_Actualizar
+    @UsuarioId       INT,
+    @NombreCompleto  NVARCHAR(150),
+    @Correo          NVARCHAR(150),
+    @PasswordHash    NVARCHAR(256)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Usuarios
+    SET NombreCompleto = @NombreCompleto,
+        Correo = @Correo,
+        PasswordHash = @PasswordHash
+    WHERE UsuarioId = @UsuarioId;
+END
+GO
+
+CREATE OR ALTER PROCEDURE Usuarios_Borrar
+    @UsuarioId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM Usuarios WHERE UsuarioId = @UsuarioId;
+END
+GO
+
+-- Perfil de nutriologo para un usuario ya creado (registro publico)
+CREATE OR ALTER PROCEDURE Nutriologos_Crear
+    @UsuarioId          INT,
+    @CedulaProfesional  NVARCHAR(20),
+    @Especialidad       NVARCHAR(100) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Nutriologos (UsuarioId, CedulaProfesional, Especialidad)
+    VALUES (@UsuarioId, @CedulaProfesional, @Especialidad);
+
+    SELECT CAST(SCOPE_IDENTITY() AS INT) AS NutriologoId;
+END
+GO

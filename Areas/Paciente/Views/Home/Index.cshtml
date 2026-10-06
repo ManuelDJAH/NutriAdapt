@@ -3,6 +3,7 @@
 }
 
 <h1>Panel del paciente</h1>
+<p class="lead">Bienvenido(a), @User.FindFirst(NutriAdapt.Servicios.UsuarioClaimsPrincipalFactory.ClaimNombreCompleto)?.Value.</p>
 <p class="text-muted">Próximamente...</p>
 
 <ul>
@@ -10,5 +11,3 @@
     <li>Buscar una receta del catálogo y adaptarla a lo que me queda</li>
     <li>Ver mi historial de recetas adaptadas</li>
 </ul>
-
-<a class="btn btn-outline-secondary" asp-area="" asp-controller="Home" asp-action="Index">Volver al inicio</a>

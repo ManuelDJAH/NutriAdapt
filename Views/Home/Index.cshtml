@@ -2,45 +2,54 @@
     ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center mb-5">
+<div class="text-center py-4 mb-4">
     <h1 class="display-4">NutriAdapt</h1>
     <p class="lead text-muted">
-        Planes nutricionales por porciones equivalentes (SMAE) y recetas adaptadas a cada paciente.
+        Planes nutricionales por porciones equivalentes (SMAE) y recetas que se adaptan
+        automáticamente a lo que le toca a cada paciente.
     </p>
+    <div class="d-flex justify-content-center gap-2 mt-4">
+        <a class="btn btn-primary btn-lg" asp-controller="Usuarios" asp-action="Login">Iniciar sesión</a>
+        <a class="btn btn-outline-primary btn-lg" asp-controller="Usuarios" asp-action="Registro">Soy nutriólogo, quiero registrarme</a>
+    </div>
 </div>
 
-<div class="row justify-content-center g-4">
-    <div class="col-md-5">
-        <div class="card h-100 border-success tarjeta-rol">
-            <div class="card-header bg-success text-white">
-                <h4 class="my-1">Nutriólogo</h4>
-            </div>
-            <div class="card-body d-flex flex-column">
-                <p class="card-text">Gestiona a tus pacientes, sus planes y el catálogo de alimentos y recetas.</p>
-                <ul class="text-muted small">
-                    <li>Pacientes y planes nutricionales</li>
-                    <li>Catálogo de alimentos y recetas</li>
-                    <li>Recetas adaptadas e historial</li>
-                </ul>
-                <a class="btn btn-success mt-auto" asp-area="Nutriologo" asp-controller="Home" asp-action="Index">Entrar como nutriólogo</a>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100 tarjeta-rol">
+            <div class="card-body">
+                <h5 class="card-title">Porciones por grupo</h5>
+                <p class="card-text text-muted">
+                    El plan de cada paciente se arma en porciones de cereales, leguminosas, AOA, frutas,
+                    verduras y grasas por tiempo de comida, como se trabaja con el SMAE.
+                </p>
             </div>
         </div>
     </div>
-
-    <div class="col-md-5">
-        <div class="card h-100 border-primary tarjeta-rol">
-            <div class="card-header bg-primary text-white">
-                <h4 class="my-1">Paciente</h4>
+    <div class="col-md-4">
+        <div class="card h-100 tarjeta-rol">
+            <div class="card-body">
+                <h5 class="card-title">Recetas que se ajustan solas</h5>
+                <p class="card-text text-muted">
+                    Cada ingrediente se reescala con el factor de su grupo:
+                    porciones asignadas entre porciones de la receta original.
+                </p>
             </div>
-            <div class="card-body d-flex flex-column">
-                <p class="card-text">Consulta tu plan y adapta cualquier receta a las porciones que te tocan.</p>
-                <ul class="text-muted small">
-                    <li>Mi plan por tiempo de comida</li>
-                    <li>Adaptar una receta del catálogo</li>
-                    <li>Mi historial de recetas</li>
-                </ul>
-                <a class="btn btn-primary mt-auto" asp-area="Paciente" asp-controller="Home" asp-action="Index">Entrar como paciente</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 tarjeta-rol">
+            <div class="card-body">
+                <h5 class="card-title">Nutriólogo y paciente</h5>
+                <p class="card-text text-muted">
+                    El nutriólogo gestiona pacientes, planes y catálogos. El paciente consulta su plan y
+                    adapta cualquier receta a lo que le queda en el día.
+                </p>
             </div>
         </div>
     </div>
 </div>
+
+<p class="text-center text-muted mt-4">
+    ¿Eres paciente? Tu nutriólogo te da de alta y te comparte tu acceso.
+</p>
