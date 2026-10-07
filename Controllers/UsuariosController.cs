@@ -58,7 +58,7 @@ public class UsuariosController : Controller
 
         try
         {
-            await repositorioNutriologos.Crear(usuario.UsuarioId, modelo.CedulaProfesional, modelo.Especialidad);
+            await repositorioNutriologos.Crear(usuario.UsuarioId, modelo.CedulaProfesional, especialidad: null);
         }
         catch
         {

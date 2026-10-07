@@ -3,39 +3,32 @@
     ViewData["Title"] = "Iniciar sesión";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <h1>Iniciar sesión</h1>
-        <h5 class="text-muted mb-4">Entra con el correo con el que te registraste o con el que te dio de alta tu nutriólogo.</h5>
+<h1>Iniciar sesión</h1>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]">
-            <div class="mb-3">
-                <label asp-for="Correo" class="form-label"></label>
-                <input type="email" asp-for="Correo" class="form-control" autocomplete="username" />
-                <span asp-validation-for="Correo" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="current-password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3 form-check">
-                <input asp-for="Recuerdame" class="form-check-input" />
-                <label asp-for="Recuerdame" class="form-check-label"></label>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Entrar</button>
-        </form>
-
-        <p class="mt-3 text-center">
-            ¿Eres nutriólogo y no tienes cuenta? <a asp-action="Registro">Regístrate</a>
-        </p>
+<form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+    <div class="mb-3">
+        <label asp-for="Correo" class="form-label"></label>
+        <input type="email" asp-for="Correo" class="form-control" />
+        <span asp-validation-for="Correo" class="text-danger"></span>
     </div>
-</div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="Recuerdame" class="form-check-input" />
+        <label asp-for="Recuerdame" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Entrar</button>
+</form>
+
+<p class="mt-3">¿Eres nutriólogo y no tienes cuenta? <a asp-action="Registro">Regístrate</a></p>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -22,17 +22,7 @@ public class RegistroViewModel
     public string Password { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "El campo {0} es requerido")]
-    [DataType(DataType.Password)]
-    [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coinciden")]
-    [Display(Name = "Confirmar contraseña")]
-    public string ConfirmarPassword { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "El campo {0} es requerido")]
     [StringLength(20, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
     [Display(Name = "Cédula profesional")]
     public string CedulaProfesional { get; set; } = string.Empty;
-
-    [StringLength(100, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
-    [Display(Name = "Especialidad (opcional)")]
-    public string? Especialidad { get; set; }
 }
