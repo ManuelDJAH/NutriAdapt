@@ -12,6 +12,7 @@ public interface IRepositorioUsuarios
     Task<Usuario?> BuscarPorId(int usuarioId);
     Task Actualizar(Usuario usuario);
     Task Borrar(int usuarioId);
+    Task<bool> Existe(string correo);
 }
 
 public class RepositorioUsuarios : IRepositorioUsuarios
@@ -27,7 +28,7 @@ public class RepositorioUsuarios : IRepositorioUsuarios
     {
         using var connection = new SqlConnection(connectionString);
         return await connection.QuerySingleAsync<int>("Usuarios_Crear",
-            new { usuario.NombreCompleto, usuario.Correo, usuario.PasswordHash, usuario.RolId },
+            new { usuario.NombreCompleto, usuario.Correo, usuario.Contraseña, usuario.RolId },
             commandType: CommandType.StoredProcedure);
     }
 
@@ -49,7 +50,7 @@ public class RepositorioUsuarios : IRepositorioUsuarios
     {
         using var connection = new SqlConnection(connectionString);
         await connection.ExecuteAsync("Usuarios_Actualizar",
-            new { usuario.UsuarioId, usuario.NombreCompleto, usuario.Correo, usuario.PasswordHash },
+            new { usuario.UsuarioId, usuario.NombreCompleto, usuario.Correo, usuario.Contraseña },
             commandType: CommandType.StoredProcedure);
     }
 
@@ -58,5 +59,14 @@ public class RepositorioUsuarios : IRepositorioUsuarios
         using var connection = new SqlConnection(connectionString);
         await connection.ExecuteAsync("Usuarios_Borrar",
             new { UsuarioId = usuarioId }, commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task<bool> Existe(string correo)
+    {
+        using var connection = new SqlConnection(connectionString);
+        var existe = await connection.QueryFirstOrDefaultAsync<int>(
+            @"SELECT 1 FROM Usuarios WHERE Correo = @Correo;",
+            new { correo });
+        return existe == 1;
     }
 }

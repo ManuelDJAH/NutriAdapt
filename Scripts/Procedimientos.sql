@@ -1,10 +1,20 @@
-/* =========================================================
-   NutriAdapt - Procedimientos almacenados
+﻿/* =========================================================
+   NutriAdapt - Procedimientos almacenados (y cambios a tablas)
    Convencion de nombres: {Tabla}_{Accion}Con{Detalle} (sin prefijo sp_).
    Cada procedimiento se crea con su nombre nuevo y se elimina el
    anterior (sp_...). Se puede correr varias veces sin error.
    ========================================================= */
 USE NutriAdapt;
+GO
+
+/* =========================================================
+   CAMBIOS A TABLAS
+   Usuarios.PasswordHash se renombra a Contraseña (proyecto escolar:
+   la contraseña se guarda en texto plano, ver PasswordHasherTextoPlano).
+   Solo se ejecuta si la columna todavia tiene el nombre anterior.
+   ========================================================= */
+IF COL_LENGTH('Usuarios', 'PasswordHash') IS NOT NULL
+    EXEC sp_rename 'Usuarios.PasswordHash', 'Contraseña', 'COLUMN';
 GO
 
 
@@ -63,7 +73,7 @@ GO
 CREATE OR ALTER PROCEDURE Pacientes_Registrar
     @NombreCompleto   NVARCHAR(150),
     @Correo           NVARCHAR(150),
-    @PasswordHash     NVARCHAR(256),
+    @Contraseña     NVARCHAR(256),
     @NutriologoId     INT,
     @FechaNacimiento  DATE,
     @Sexo             CHAR(1),
@@ -76,8 +86,8 @@ BEGIN
 
         DECLARE @UsuarioId INT;
 
-        INSERT INTO Usuarios (NombreCompleto, Correo, PasswordHash, RolId)
-        VALUES (@NombreCompleto, @Correo, @PasswordHash, 2);
+        INSERT INTO Usuarios (NombreCompleto, Correo, Contraseña, RolId)
+        VALUES (@NombreCompleto, @Correo, @Contraseña, 2);
 
         SET @UsuarioId = SCOPE_IDENTITY();
 
@@ -266,14 +276,14 @@ GO
 CREATE OR ALTER PROCEDURE Usuarios_Crear
     @NombreCompleto  NVARCHAR(150),
     @Correo          NVARCHAR(150),
-    @PasswordHash    NVARCHAR(256),
+    @Contraseña    NVARCHAR(256),
     @RolId           TINYINT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO Usuarios (NombreCompleto, Correo, PasswordHash, RolId)
-    VALUES (@NombreCompleto, @Correo, @PasswordHash, @RolId);
+    INSERT INTO Usuarios (NombreCompleto, Correo, Contraseña, RolId)
+    VALUES (@NombreCompleto, @Correo, @Contraseña, @RolId);
 
     SELECT CAST(SCOPE_IDENTITY() AS INT) AS UsuarioId;
 END
@@ -285,7 +295,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT UsuarioId, NombreCompleto, Correo, PasswordHash, RolId, FechaCreacion
+    SELECT UsuarioId, NombreCompleto, Correo, Contraseña, RolId, FechaCreacion
     FROM Usuarios
     WHERE Correo = @Correo;
 END
@@ -297,7 +307,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT UsuarioId, NombreCompleto, Correo, PasswordHash, RolId, FechaCreacion
+    SELECT UsuarioId, NombreCompleto, Correo, Contraseña, RolId, FechaCreacion
     FROM Usuarios
     WHERE UsuarioId = @UsuarioId;
 END
@@ -307,7 +317,7 @@ CREATE OR ALTER PROCEDURE Usuarios_Actualizar
     @UsuarioId       INT,
     @NombreCompleto  NVARCHAR(150),
     @Correo          NVARCHAR(150),
-    @PasswordHash    NVARCHAR(256)
+    @Contraseña    NVARCHAR(256)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -315,7 +325,7 @@ BEGIN
     UPDATE Usuarios
     SET NombreCompleto = @NombreCompleto,
         Correo = @Correo,
-        PasswordHash = @PasswordHash
+        Contraseña = @Contraseña
     WHERE UsuarioId = @UsuarioId;
 END
 GO
@@ -343,5 +353,39 @@ BEGIN
     VALUES (@UsuarioId, @CedulaProfesional, @Especialidad);
 
     SELECT CAST(SCOPE_IDENTITY() AS INT) AS NutriologoId;
+END
+GO
+
+
+/* =========================================================
+   DASHBOARD DEL NUTRIOLOGO
+   Datos del nutriologo con sesion iniciada y conteos para sus tarjetas.
+   Pacientes, planes y recetas adaptadas son solo los suyos;
+   alimentos y recetas son el catalogo general.
+   ========================================================= */
+
+CREATE OR ALTER PROCEDURE Nutriologos_ObtenerResumenPorUsuario
+    @UsuarioId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        n.NutriologoId,
+        u.NombreCompleto,
+        n.CedulaProfesional,
+        n.Especialidad,
+        (SELECT COUNT(*) FROM Pacientes p
+            WHERE p.NutriologoId = n.NutriologoId) AS TotalPacientes,
+        (SELECT COUNT(*) FROM PlanesNutricionales pn
+            WHERE pn.NutriologoId = n.NutriologoId AND pn.Estado = 'Activo') AS PlanesActivos,
+        (SELECT COUNT(*) FROM RecetasAdaptadas ra
+            INNER JOIN Pacientes p ON p.PacienteId = ra.PacienteId
+            WHERE p.NutriologoId = n.NutriologoId) AS RecetasAdaptadas,
+        (SELECT COUNT(*) FROM Alimentos) AS TotalAlimentos,
+        (SELECT COUNT(*) FROM Recetas) AS TotalRecetas
+    FROM Nutriologos n
+    INNER JOIN Usuarios u ON u.UsuarioId = n.UsuarioId
+    WHERE n.UsuarioId = @UsuarioId;
 END
 GO

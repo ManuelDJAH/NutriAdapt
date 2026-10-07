@@ -238,12 +238,12 @@ public partial class NutriAdaptContext : DbContext
 
             entity.HasIndex(e => e.Correo, "UQ__Usuarios__60695A193526142F").IsUnique();
 
+            entity.Property(e => e.Contraseña).HasMaxLength(256);
             entity.Property(e => e.Correo).HasMaxLength(150);
             entity.Property(e => e.FechaCreacion)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.NombreCompleto).HasMaxLength(150);
-            entity.Property(e => e.PasswordHash).HasMaxLength(256);
         });
 
         OnModelCreatingPartial(modelBuilder);

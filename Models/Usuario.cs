@@ -7,7 +7,7 @@ public class Usuario
     public int UsuarioId { get; set; }
     public string NombreCompleto { get; set; } = string.Empty;
     public string Correo { get; set; } = string.Empty;
-    public string? PasswordHash { get; set; }
+    public string? Contraseña { get; set; }
     public byte RolId { get; set; }
     public DateTime FechaCreacion { get; set; }
 

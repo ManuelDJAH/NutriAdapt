@@ -1,15 +1,85 @@
+@model ResumenNutriologoViewModel
 @{
-    ViewData["Title"] = "Nutriólogo";
+    ViewData["Title"] = "Panel del nutriólogo";
 }
 
 <h1>Panel del nutriólogo</h1>
-<p class="lead">Bienvenido(a), @User.FindFirst(NutriAdapt.Servicios.UsuarioClaimsPrincipalFactory.ClaimNombreCompleto)?.Value.</p>
-<p class="text-muted">Próximamente...</p>
+<h5 class="text-muted">
+    @Model.NombreCompleto · Cédula @Model.CedulaProfesional
+    @if (!string.IsNullOrEmpty(Model.Especialidad))
+    {
+        <span>· @Model.Especialidad</span>
+    }
+</h5>
 
-<ul>
-    <li>Pacientes (alta, datos generales, asignación a su cartera)</li>
-    <li>Catálogo de alimentos y recetas</li>
-    <li>Planes nutricionales: porciones por grupo y tiempo de comida</li>
-    <li>Generar recetas adaptadas dentro del plan del paciente</li>
-    <li>Historial de recetas adaptadas por paciente</li>
+<h4 class="mt-4">Mis pacientes</h4>
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="card-title">@Model.TotalPacientes</h2>
+                <p class="card-text text-muted">Pacientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="card-title">@Model.PlanesActivos</h2>
+                <p class="card-text text-muted">Planes activos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="card-title">@Model.RecetasAdaptadas</h2>
+                <p class="card-text text-muted">Recetas adaptadas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Catálogo</h4>
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="card-title">@Model.TotalAlimentos</h2>
+                <p class="card-text text-muted">Alimentos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="card-title">@Model.TotalRecetas</h2>
+                <p class="card-text text-muted">Recetas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Módulos</h4>
+<ul class="list-group mb-4">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Pacientes (alta, datos generales, asignación a tu cartera)
+        <span class="badge bg-secondary">Próximamente</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Planes nutricionales (porciones por grupo y tiempo de comida)
+        <span class="badge bg-secondary">Próximamente</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Catálogo de alimentos
+        <span class="badge bg-secondary">Próximamente</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Recetas
+        <span class="badge bg-secondary">Próximamente</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Generar recetas adaptadas e historial por paciente
+        <span class="badge bg-secondary">Próximamente</span>
+    </li>
 </ul>

@@ -11,7 +11,7 @@ public partial class Usuarios
 
     public string Correo { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
+    public string Contraseña { get; set; } = null!;
 
     public byte RolId { get; set; }
 

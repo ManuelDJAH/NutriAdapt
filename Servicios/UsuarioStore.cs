@@ -107,20 +107,22 @@ public class UsuarioStore : IUserStore<Usuario>, IUserEmailStore<Usuario>, IUser
         return Task.CompletedTask;
     }
 
+    // Los nombres "PasswordHash" vienen de la interfaz de Identity;
+    // con PasswordHasherTextoPlano lo que llega aqui es la contraseña tal cual
     public Task<string?> GetPasswordHashAsync(Usuario user, CancellationToken cancellationToken)
     {
-        return Task.FromResult(user.PasswordHash);
+        return Task.FromResult(user.Contraseña);
     }
 
     public Task SetPasswordHashAsync(Usuario user, string? passwordHash, CancellationToken cancellationToken)
     {
-        user.PasswordHash = passwordHash;
+        user.Contraseña = passwordHash;
         return Task.CompletedTask;
     }
 
     public Task<bool> HasPasswordAsync(Usuario user, CancellationToken cancellationToken)
     {
-        return Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
+        return Task.FromResult(!string.IsNullOrEmpty(user.Contraseña));
     }
 
     public void Dispose()

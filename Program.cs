@@ -12,6 +12,8 @@ builder.Services.AddDbContext<NutriAdaptContext>(options =>
 
 builder.Services.AddTransient<IRepositorioUsuarios, RepositorioUsuarios>();
 builder.Services.AddTransient<IRepositorioNutriologos, RepositorioNutriologos>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 
 // Identity sobre la tabla Usuarios (UsuarioStore + Dapper), sin tablas AspNet*
 builder.Services.AddTransient<IUserStore<Usuario>, UsuarioStore>();
@@ -19,6 +21,7 @@ builder.Services.AddIdentityCore<Usuario>()
     .AddSignInManager()
     .AddClaimsPrincipalFactory<UsuarioClaimsPrincipalFactory>()
     .AddErrorDescriber<MensajesDeErrorIdentity>();
+builder.Services.AddTransient<IPasswordHasher<Usuario>, PasswordHasherTextoPlano>();
 
 builder.Services.AddAuthentication(options =>
 {

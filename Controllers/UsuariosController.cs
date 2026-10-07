@@ -12,14 +12,17 @@ public class UsuariosController : Controller
     private readonly UserManager<Usuario> userManager;
     private readonly SignInManager<Usuario> signInManager;
     private readonly IRepositorioNutriologos repositorioNutriologos;
+    private readonly IRepositorioUsuarios repositorioUsuarios;
 
     public UsuariosController(UserManager<Usuario> userManager,
         SignInManager<Usuario> signInManager,
-        IRepositorioNutriologos repositorioNutriologos)
+        IRepositorioNutriologos repositorioNutriologos,
+        IRepositorioUsuarios repositorioUsuarios)
     {
         this.userManager = userManager;
         this.signInManager = signInManager;
         this.repositorioNutriologos = repositorioNutriologos;
+        this.repositorioUsuarios = repositorioUsuarios;
     }
 
     [AllowAnonymous]
@@ -35,6 +38,16 @@ public class UsuariosController : Controller
     {
         if (!ModelState.IsValid)
         {
+            return View(modelo);
+        }
+
+        var yaExisteUsuario =
+            await repositorioUsuarios.Existe(modelo.Correo);
+
+        if (yaExisteUsuario)
+        {
+            ModelState.AddModelError(nameof(modelo.Correo),
+                $"El correo {modelo.Correo} ya existe.");
             return View(modelo);
         }
 
